@@ -1,0 +1,574 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Palette — lifted from the reference design system */
+  --color-page: #f5f9f9;
+  --color-ink: #13202a;
+  --color-navy: #0c2840;
+  --color-teal: #0d7d86;
+  --color-subtle: #e5efef;
+  --color-line: #d6e3e2;
+  --color-secondary: #5b6b70;
+  --color-tertiary: #72868d;
+
+  /* Dark-section surface tints */
+  --color-deep: #13202a;
+  --color-step: #0c2840;
+  --color-mist: #93a8be;
+  --color-cyan: #5fa9b2;
+  --color-teal-bright: #0e8893;
+  --color-teal-deep: #0e7c86;
+  --color-paper: #dce5e6;
+  --color-hair: #3c4a52;
+
+  /* Type */
+  --font-serif: 'PT Serif', Georgia, serif;
+  --font-sans: 'PT Sans', Arial, sans-serif;
+  --font-caption: 'PT Sans Caption', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Rhythm */
+  --spacing-gutter: 80px;
+  --spacing-measure: 1280px;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-width: 0;
+    background: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-teal);
+    color: var(--color-page);
+  }
+}
+
+@utility gutter {
+  padding-inline: 80px;
+
+  @media (max-width: 767px) {
+    padding-inline: 20px;
+  }
+}
+
+@utility frame {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+}
+
+/* ------------------------------------------------------------------ *
+ * Buttons
+ * ------------------------------------------------------------------ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 16px 24px;
+  border: 1px solid var(--color-line);
+  border-radius: 2px;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-caption);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-teal-deep);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  border-color: var(--color-navy);
+  background: var(--color-navy);
+  color: var(--color-page);
+}
+
+.btn-primary:hover {
+  border-color: var(--color-teal);
+  background: var(--color-teal);
+  color: var(--color-page);
+}
+
+.btn-secondary:hover,
+.btn-ghost:hover {
+  border-color: var(--color-teal-deep);
+  background: var(--color-page);
+  color: var(--color-teal);
+}
+
+.btn-sm {
+  height: 34px;
+  padding: 7px 16px;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.btn-sm-plain {
+  border-color: transparent;
+}
+
+/* ------------------------------------------------------------------ *
+ * Section eyebrow: mono label + hairline rule
+ * ------------------------------------------------------------------ */
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 16px;
+  color: var(--color-teal);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 2.24px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.eyebrow .rule {
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--color-teal);
+}
+
+.eyebrow-wide {
+  width: 100%;
+  gap: 24px;
+}
+
+.eyebrow-wide .rule {
+  order: 0;
+  flex: 1 0 0;
+  width: auto;
+  background: var(--color-line);
+}
+
+.eyebrow-centered {
+  justify-content: center;
+}
+
+/* ------------------------------------------------------------------ *
+ * Section headings
+ * ------------------------------------------------------------------ */
+
+.section-title {
+  margin: 24px 0 0;
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: -1.36px;
+  line-height: 36px;
+}
+
+@media (min-width: 768px) {
+  .section-title {
+    font-size: 56px;
+    letter-spacing: -2.24px;
+    line-height: 56px;
+  }
+}
+
+.section-lede {
+  margin: 16px 0 0;
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+@media (min-width: 768px) {
+  .section-lede {
+    font-size: 18px;
+  }
+}
+
+.accent {
+  color: var(--color-teal);
+  font-style: normal;
+}
+
+/* ------------------------------------------------------------------ *
+ * Scroll reveal (connected workflow)
+ * ------------------------------------------------------------------ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.62s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+    transform 0.62s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
+}
+
+.reveal-up-small {
+  transform: translateY(8px);
+  transition-duration: 0.52s;
+}
+
+.reveal-fade {
+  transform: none;
+  transition-duration: 0.5s;
+}
+
+.reveal-slide {
+  transform: translateX(16px);
+  transition-duration: 0.58s;
+}
+
+/* Choreography inside a step only starts once the step itself is revealed. */
+.reveal:not(.is-revealed) *,
+.reveal:not(.is-revealed) *::before,
+.reveal:not(.is-revealed) *::after {
+  animation-play-state: paused !important;
+}
+
+.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes workflow-detail-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes workflow-result-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes workflow-line-enter {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes workflow-bar-enter {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes workflow-connector-enter {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes workflow-arrow-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-4px) rotate(45deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes workflow-path-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes workflow-outcome-arrow-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes workflow-loop-enter {
+  from {
+    opacity: 0;
+    transform: rotate(-180deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes workflow-stage-pulse {
+  0%,
+  86%,
+  100% {
+    border-color: rgba(95, 169, 178, 0.24);
+  }
+  4% {
+    border-color: rgba(14, 136, 147, 0.85);
+  }
+}
+
+@keyframes workflow-action-pulse {
+  0%,
+  100% {
+    color: #9bb0b7;
+  }
+  50% {
+    color: #5fa9b2;
+  }
+}
+
+.detail-enter {
+  animation: workflow-detail-enter 0.56s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ------------------------------------------------------------------ *
+ * Hero product mock — looping 7s choreography
+ * ------------------------------------------------------------------ */
+
+@keyframes kpiIn {
+  0%,
+  3% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  10%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes chartScan {
+  0% {
+    opacity: 0.12;
+    transform: translateX(0);
+  }
+  5%,
+  95% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.12;
+    transform: translateX(220px);
+  }
+}
+
+@keyframes endpointPulse {
+  0% {
+    transform: scale(1);
+  }
+  10%,
+  86% {
+    transform: scale(1.75);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rowSelect {
+  0% {
+    opacity: 0.35;
+  }
+  12% {
+    opacity: 1;
+  }
+  22% {
+    opacity: 0.55;
+  }
+  32%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes typingIn {
+  0%,
+  55% {
+    opacity: 0;
+  }
+  60%,
+  70% {
+    opacity: 1;
+  }
+  74%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes answerIn {
+  0%,
+  70% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  80%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes researchIn {
+  0%,
+  17% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  25%,
+  54% {
+    opacity: 1;
+    transform: none;
+  }
+  62%,
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes evidenceIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  30%,
+  54% {
+    opacity: 1;
+    transform: none;
+  }
+  60%,
+  100% {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+}
+
+@keyframes livePulse {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes routeDash {
+  to {
+    stroke-dashoffset: -8;
+  }
+}
+
+.anim-kpi-1 {
+  animation: kpiIn 7s infinite both;
+}
+.anim-kpi-2 {
+  animation: kpiIn 7s infinite both;
+  animation-delay: 0.16s;
+}
+.anim-kpi-3 {
+  animation: kpiIn 7s infinite both;
+  animation-delay: 0.32s;
+}
+.anim-scan {
+  animation: chartScan 7s linear infinite both;
+}
+.anim-endpoint {
+  animation: endpointPulse 7s infinite both;
+}
+.anim-row-selected {
+  animation: rowSelect 7s infinite both;
+}
+.anim-typing {
+  animation: typingIn 7s infinite both;
+}
+.anim-answer {
+  animation: answerIn 7s infinite both;
+}
+.anim-research {
+  animation: researchIn 7s infinite both;
+}
+.anim-evidence-1 {
+  animation: evidenceIn 7s infinite both;
+}
+.anim-evidence-2 {
+  animation: evidenceIn 7s infinite both;
+  animation-delay: 0.18s;
+}
+.anim-evidence-3 {
+  animation: evidenceIn 7s infinite both;
+  animation-delay: 0.36s;
+}
+.anim-live {
+  animation: livePulse 7s ease-in-out infinite both;
+}
+.anim-route {
+  animation: routeDash 1.2s linear infinite;
+}
+
+/* Focus ring for the demo tabs */
+.demo-step:focus-visible {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
